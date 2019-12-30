@@ -15,13 +15,13 @@ module StateMachine(input logic clk, reset,
 
 	always_ff @(posedge clk, posedge reset)
 		if (reset)
-			state <= S0;
+			state <= s0;
 		else
 			state <= nextstate;
 
 	always_comb
 		case (state)
-			S0:
+			s0:
                 nextstate = s1;
             s1:
                 if (opcode == LW || opcode == SW)
@@ -57,8 +57,8 @@ module StateMachine(input logic clk, reset,
                 nextstate = s0;
             s11:
                 nextstate = s0;
-            defult: 
-            nextstate = s0;
+            default: 
+                nextstate = s0;
         endcase
 
     
@@ -73,7 +73,7 @@ module StateMachine(input logic clk, reset,
     assign pc_write = (state == s0) ? 1 : 0;
     assign branch = (state == s8) ? 1 : 1'bX;
     assign reg_write = (state == s4 || state == s7 || state == s10) ? 1 : 0;
-    assign alu_op = (state == s0 || state == s1 || state == s2 || state == s9) ? 2'b00 : ((state == s6) ? 2'b10 : ((state == s8) ? 2'b01 : 2'bXX))
+    assign alu_op = (state == s0 || state == s1 || state == s2 || state == s9) ? 2'b00 : ((state == s6) ? 2'b10 : ((state == s8) ? 2'b01 : 2'bXX));
 
 endmodule
 
@@ -81,19 +81,20 @@ module ALUDecoder(input logic[5:0] funct,
                   input logic[1:0] alu_op,
                   output logic[2:0] alu_control);
 
-    if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0000)
-        alu_control = 3'b010;
-    else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0010)
-        alu_control = 3'b110;
-    else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0100)
-        alu_control = 3'b000;
-    else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0101)
-        alu_control = 3'b001;
-    else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b1010)
-        alu_control = 3'b111;
-    else if (alu_op[1:0] == 2'b00)
-        alu_control = 3'b010;
-    else if (alu_op[1:0] == 2'b01)
-        alu_control = 3'b110;
+    always_comb
+        if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0000)
+            alu_control = 3'b010;
+        else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0010)
+            alu_control = 3'b110;
+        else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0100)
+            alu_control = 3'b000;
+        else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b0101)
+            alu_control = 3'b001;
+        else if (alu_op[1:0] == 2'b10 && funct[3:0] == 4'b1010)
+            alu_control = 3'b111;
+        else if (alu_op[1:0] == 2'b00)
+            alu_control = 3'b010;
+        else if (alu_op[1:0] == 2'b01)
+            alu_control = 3'b110;
 
 endmodule
