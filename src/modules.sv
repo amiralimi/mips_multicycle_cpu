@@ -4,7 +4,7 @@ module MUX2 #(parameter WIDTH = 8)
               output logic [WIDTH - 1:0] out);
     
     always_comb
-        out = s ? s1: s2;
+        out = s ? s1: s0;
 
 endmodule
 
@@ -36,7 +36,7 @@ module MUX4 #(WIDTH = 8)
     logic [WIDTH - 1:0] out1, out2, out3;
     MUX2 m1(s0, s1, s[0], out1);
     MUX2 m2(s2, s3, s[0], out2);
-    MUX2 m1(out1, out2, s[1], out);
+    MUX2 m3(out1, out2, s[1], out);
 
 endmodule
 
