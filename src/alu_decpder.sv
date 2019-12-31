@@ -17,5 +17,7 @@ module ALUDecoder(input logic[5:0] funct,
            alu_control = 3'b010;
        else if (alu_op[1:0] == 2'b01)
            alu_control = 3'b110;
+       else
+           alu_control = 3'b000;
 
 endmodule

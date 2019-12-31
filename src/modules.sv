@@ -34,9 +34,9 @@ module MUX4 #(WIDTH = 8)
               output logic [WIDTH - 1:0] out);
     
     logic [WIDTH - 1:0] out1, out2, out3;
-    MUX2 m1(s0, s1, s[0], out1);
-    MUX2 m2(s2, s3, s[0], out2);
-    MUX2 m3(out1, out2, s[1], out);
+    MUX2 #(WIDTH)m1(s0, s1, s[0], out1);
+    MUX2 #(WIDTH)m2(s2, s3, s[0], out2);
+    MUX2 #(WIDTH)m3(out1, out2, s[1], out);
 
 endmodule
 
@@ -52,6 +52,8 @@ module ALU(input logic[2:0] alu_control,
             2'b010: alu_result = src_a + src_b;
             2'b110: alu_result = src_a - src_b;
             2'b111: alu_result = src_a < src_b;
+            default:
+                alu_result = 0;
 		endcase
 
     assign zero = (alu_result == 32'b0);

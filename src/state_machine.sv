@@ -3,7 +3,7 @@ module state_machine(input logic clk, reset,
                     output logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, mem_write, pc_write, branch, reg_write,
                     output logic[1:0] alu_src_b, pc_src, alu_op);
     
-    parameter LW = 100011;
+    parameter LW = 6'b100011;
     parameter SW = 6'b101011;
     parameter RTYPE = 6'b000000;
     parameter BEQ = 6'b000100;
@@ -32,8 +32,10 @@ module state_machine(input logic clk, reset,
                     nextstate = s8;
                 else if (opcode == ADDI)
                     nextstate = s9;
-                else
+                else if (opcode == J)
                     nextstate = s11;
+                else 
+                    nextstate = s0;
             s2:
                 if (opcode == LW)
                     nextstate = s3;
