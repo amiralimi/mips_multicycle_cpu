@@ -34,7 +34,8 @@ module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, m
     ALU alu(alu_control, src_a, src_b, alu_result, zero);
     FlipFlop #(32) alu_flop(alu_result, clk, alu_out);
     
-    logic[31:0] pc_jump = {pc_out[31:28], instr[25:0], TWO_BIT_ZERO};
+    logic[31:0] pc_jump;
+	 assign pc_jump = {pc_out[31:28], instr[25:0], TWO_BIT_ZERO};
     
     MUX4 #(32)pc_input_mux(alu_result, alu_out, pc_jump, ZERO, pc_src, pc_in);
 

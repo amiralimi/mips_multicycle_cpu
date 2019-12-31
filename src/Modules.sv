@@ -89,11 +89,11 @@ module RegisterFile #(parameter ADDRESS_SIZE = 5, WIDTH = 32, SIZE = 32)
         rf[8] = 32'b0;
     end
 
-    assign read_data1 = rf[a1[WIDTH - 1:2]];
-    assign read_data2 = rf[a2[WIDTH - 1:2]];
+    assign read_data1 = rf[a1[ADDRESS_SIZE - 1:2]];
+    assign read_data2 = rf[a2[ADDRESS_SIZE - 1:2]];
 
     always_ff @(posedge clk)
-        if (write_enable) rf[a3[WIDTH - 1:2]] <= write_data;
+        if (write_enable) rf[a3[ADDRESS_SIZE - 1:2]] <= write_data;
 
 endmodule
 
