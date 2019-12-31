@@ -1,12 +1,16 @@
 module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, mem_write, pc_write, branch, reg_write, clk, 
                 input logic[1:0] alu_src_b, pc_src,
-                input logic[2:0] alu_control);
+                input logic[2:0] alu_control,
+                output logic[5:0] opcode, funct);
 
     logic[31:0] pc_out, pc_in, mem_adr, mem_data, instr,  register_mux_input,  register_data_input, 
                 register_data1, register_data2, a, b, src_a, src_b, FOUR = 4, imm_exit, imm_exit_shift,
                 alu_result, alu_out, ZERO = 0;
     logic[4:0] register_file_a3_input;
     logic zero;
+
+    assign opcode = instr[31:26];
+    assign funct = instr[5:0];
 
     FlipFlopEn #(32)pc_flop(pc_in, clk, pc_out);
     MUX2 #(32)pc_mux(pc_out, alu_out, i_or_d, address);

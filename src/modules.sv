@@ -75,7 +75,7 @@ module Memory #(parameter WIDTH = 32, SIZE=1024)
 
 endmodule
 
-module RegisterFile #(ADDRESS_SIZE = 5, WIDTH = 32, SIZE = 32)
+module RegisterFile #(parameter ADDRESS_SIZE = 5, WIDTH = 32, SIZE = 32)
                      (input logic [ADDRESS_SIZE - 1:0] a1, a2, a3,
                       input logic [WIDTH - 1:0] write_data,
                       input logic write_enable, clk,
