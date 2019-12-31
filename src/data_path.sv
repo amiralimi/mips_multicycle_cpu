@@ -10,9 +10,9 @@ module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, m
     logic[4:0] register_file_a3_input;
     logic zero, pc_en;
 
-    // initial begin
-        // pc_out = 32'b0;
-    // end
+    initial begin
+        pc_out = 0;
+    end
 
     assign opcode = instr[31:26];
     assign funct = instr[5:0];
@@ -34,7 +34,7 @@ module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, m
     ALU alu(alu_control, src_a, src_b, alu_result, zero);
     FlipFlop #(32) alu_flop(alu_result, clk, alu_out);
     
-    logic[32:0] pc_jump = {pc_out[31:28], instr[25:0], TWO_BIT_ZERO};
+    logic[31:0] pc_jump = {pc_out[31:28], instr[25:0], TWO_BIT_ZERO};
     
     MUX4 #(32)pc_input_mux(alu_result, alu_out, pc_jump, ZERO, pc_src, pc_in);
 
