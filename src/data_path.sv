@@ -7,12 +7,12 @@ module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, m
                 register_data1, register_data2, a, b, src_a, src_b, FOUR = 4, imm_exit, imm_exit_shift,
                 alu_result, alu_out, ZERO = 0;
     logic[4:0] register_file_a3_input;
-    logic zero;
+    logic zero, pc_en;
 
     assign opcode = instr[31:26];
     assign funct = instr[5:0];
 
-    FlipFlopEn #(32)pc_flop(pc_in, clk, pc_out);
+    FlipFlopEn #(32)pc_flop(pc_in, clk, pc_en, pc_out);
     MUX2 #(32)pc_mux(pc_out, alu_out, i_or_d, address);
     Memory memory(clk, mem_write, mem_adr, b, mem_data);
     FlipFlopEn #(32) mem_data_flop1(mem_data, clk, instr);
@@ -30,5 +30,7 @@ module DataPath(input logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, m
     FlipFlop #(32) alu_flop(alu_result, clk, alu_out);
     logic[32:0] pc_jump = {pc_out[31:28], instr[25:0], 2'b00};
     MUX4 #(32)pc_input_mux(alu_result, alu_out, pc_jump, ZERO, pc_src, pc_in);
+
+    assign pc_en = (zero && branch) || pc_write;
 
 endmodule

@@ -2,7 +2,9 @@ module TestBench();
     
     logic clk;
 
-    initial begin
+    CPU cpu(clk);
+
+    always begin
         clk <= 1;
         #5;
         clk <= 0;

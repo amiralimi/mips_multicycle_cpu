@@ -1,4 +1,4 @@
-module cpu(input clk);
+module CPU(input clk);
 
     logic mem_to_reg, reg_dest, i_or_d, alu_src_a, ir_write, mem_write, pc_write, branch, reg_write;
     logic[1:0] alu_src_b, pc_src;

@@ -83,6 +83,10 @@ module RegisterFile #(parameter ADDRESS_SIZE = 5, WIDTH = 32, SIZE = 32)
 
     logic [WIDTH - 1:0] rf[SIZE - 1:0];
 
+    initial begin
+        rf[8] = 32'b0;
+    end
+
     assign read_data1 = rf[a1[WIDTH - 1:2]];
     assign read_data2 = rf[a2[WIDTH - 1:2]];
 
