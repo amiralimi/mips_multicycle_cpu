@@ -8,9 +8,10 @@ module StateMachine(input logic clk, reset,
     parameter RTYPE = 6'b000000;
     parameter BEQ = 6'b000100;
     parameter ADDI = 6'b001000;
+    parameter ANDI = 6'b001100;
     parameter J = 6'b000010;
 
-    typedef enum logic [3:0] {s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11} statetype;
+    typedef enum logic [3:0] {s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12} statetype;
 	statetype state, nextstate;
 
 	always_ff @(posedge clk, posedge reset)
@@ -34,7 +35,9 @@ module StateMachine(input logic clk, reset,
                     nextstate = s9;
                 else if (opcode == J)
                     nextstate = s11;
-                else 
+                else if (opcode == ANDI)
+                    nextstate = s12;
+                else
                     nextstate = s0;
             s2:
                 if (opcode == LW)
@@ -59,6 +62,8 @@ module StateMachine(input logic clk, reset,
                 nextstate = s0;
             s11:
                 nextstate = s0;
+            s12: 
+                nextstate = s10;
             default: 
                 nextstate = s0;
         endcase
@@ -68,13 +73,13 @@ module StateMachine(input logic clk, reset,
     assign reg_dest = (state == s4 || state == s10) ? 0 : ((state == s7) ? 1 : 1'bX);
     assign i_or_d = (state == s3 || state == s5) ? 1 : ((state == s0) ? 0 : 1'bX);
     assign pc_src = (state == s0) ? 2'b00 : ((state == s8) ? 2'b01 : ((state == s11) ? 2'b10 : 2'bXX));
-    assign alu_src_a = (state == s2 || state == s6 || state == s8 || state == s9) ? 1 : ((state == s0 || state == s1) ? 0 : 1'bX);
-    assign alu_src_b = (state == s2 || state == s9) ? 2'b10 : ((state == s6 || state == s8) ? 2'b00 : ((state == s1) ? 2'b11 : ((state == s0) ? 2'b01 : 2'bXX)));
+    assign alu_src_a = (state == s2 || state == s6 || state == s8 || state == s9 || state == s12) ? 1 : ((state == s0 || state == s1) ? 0 : 1'bX);
+    assign alu_src_b = (state == s2 || state == s9 || state == s12) ? 2'b10 : ((state == s6 || state == s8) ? 2'b00 : ((state == s1) ? 2'b11 : ((state == s0) ? 2'b01 : 2'bXX)));
     assign ir_write = (state == s0) ? 1 : 0;
     assign mem_write = (state == s5) ? 1 : 0;
     assign pc_write = (state == s0) ? 1 : 0;
     assign branch = (state == s8) ? 1 : 1'bX;
     assign reg_write = (state == s4 || state == s7 || state == s10) ? 1 : 0;
-    assign alu_op = (state == s0 || state == s1 || state == s2 || state == s9) ? 2'b00 : ((state == s6) ? 2'b10 : ((state == s8) ? 2'b01 : 2'bXX));
+    assign alu_op = (state == s0 || state == s1 || state == s2 || state == s9) ? 2'b00 : ((state == s6) ? 2'b10 : ((state == s8) ? 2'b01 : ((state == s12) ? 2'b11 : 2'bXX)));
 
 endmodule
