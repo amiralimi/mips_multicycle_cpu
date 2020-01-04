@@ -23,3 +23,11 @@ sc_dpiheader.h
 vsim.dbg
 work/
 *.mpf
+
+
+# ignore quartus generated files
+db/
+incremental_db/
+output_files/
+*.qpf
+*.qsf
