@@ -47,11 +47,11 @@ module ALU(input logic[2:0] alu_control,
 
     always_comb
 		casex (alu_control[2:0])
-			2'b000: alu_result = src_a & src_b;
-			2'b001: alu_result = src_a | src_b;
-            2'b010: alu_result = src_a + src_b;
-            2'b110: alu_result = src_a - src_b;
-            2'b111: alu_result = src_a < src_b;
+			3'b000: alu_result = src_a & src_b;
+			3'b001: alu_result = src_a | src_b;
+            3'b010: alu_result = src_a + src_b;
+            3'b110: alu_result = src_a - src_b;
+            3'b111: alu_result = src_a < src_b;
             default:
                 alu_result = 0;
 		endcase
@@ -85,15 +85,14 @@ module RegisterFile #(parameter ADDRESS_SIZE = 5, WIDTH = 32, SIZE = 32)
 
     logic [WIDTH - 1:0] rf[SIZE - 1:0];
 
-    initial begin
-        rf[8] = 32'b0;
-    end
+    initial
+      $readmemh("rf.dat", rf);
 
-    assign read_data1 = rf[a1[ADDRESS_SIZE - 1:2]];
-    assign read_data2 = rf[a2[ADDRESS_SIZE - 1:2]];
+    assign read_data1 = rf[a1];
+    assign read_data2 = rf[a2];
 
-    always_ff @(posedge clk)
-        if (write_enable) rf[a3[ADDRESS_SIZE - 1:2]] <= write_data;
+    always @(posedge clk)
+        if (write_enable) rf[a3] <= write_data;
 
 endmodule
 
